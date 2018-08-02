@@ -1,5 +1,6 @@
 package com.base.common.utils.time;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -125,5 +126,49 @@ public class TimeUtils {
 
     public String format(LocalDateTime localDateTime, String pattern) {
         return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 获取指定时区当前时间
+     * @param zoneId
+     * @return
+     */
+    public static ZonedDateTime getZonedDateTimeByZoneId(ZoneId zoneId) {
+        // 获取当前时间的时间戳，即UTC时间戳
+        Instant instant = Instant.now();
+        // 获取指定时区时间
+        return instant.atZone(zoneId);
+    }
+
+    /**
+     * 获取指定时区当前时间
+     * @param zoneId
+     * @param format
+     * @return
+     */
+    public static String getZonedDateTimeByZoneId(ZoneId zoneId, Format format) {
+        // 获取指定时区时间
+        ZonedDateTime zonedDateTime = getZonedDateTimeByZoneId(zoneId);
+        // 按指定格式返回
+        return zonedDateTime.format(dateTimeFormatter(format));
+    }
+
+    /**
+     * 字符串时间转指定时区时间
+     * @param time
+     * @return
+     */
+    public static ZonedDateTime stringToZoneDateTime(String time) {
+        return stringToZoneDateTime(time, ZoneId.systemDefault());
+    }
+
+    /**
+     * 字符串时间转指定时区时间
+     * @param time
+     * @param zoneId
+     * @return
+     */
+    public static ZonedDateTime stringToZoneDateTime(String time, ZoneId zoneId) {
+        return LocalDateTime.parse(time, dateTimeFormatter(Format.YYYY_MM_DD_HH_MM_SS)).atZone(zoneId);
     }
 }
