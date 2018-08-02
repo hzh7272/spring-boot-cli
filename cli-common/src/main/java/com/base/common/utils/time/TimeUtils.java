@@ -71,6 +71,10 @@ public class TimeUtils {
         return dateTimeFormatterFunction.apply(format);
     }
 
+    /**
+     * 获取当前时间戳
+     * @return
+     */
     public static long timeMillis() {
         return System.currentTimeMillis();
     }
