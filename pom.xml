@@ -5,9 +5,6 @@
     <groupId>com.base</groupId>
     <artifactId>spring-boot-cli</artifactId>
     <version>1.0.0</version>
-    <modules>
-        <module>cli-common</module>
-    </modules>
     <packaging>pom</packaging>
 
     <name>spring-boot-cli</name>
@@ -19,6 +16,12 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.3.RELEASE</version>
     </parent>
+
+    <modules>
+        <module>cli-common</module>
+        <module>cli-service</module>
+        <module>cli-starter</module>
+    </modules>
 
     <properties>
         <!-- 项目环境，项目使用JDK1.8进行开发 -->
