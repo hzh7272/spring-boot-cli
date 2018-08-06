@@ -24,7 +24,7 @@ public class StringUtils {
      * @param string
      * @return
      */
-    private static boolean isEmpty(String string) {
+    public static boolean isEmpty(String string) {
         return isEmpty.test(string);
     }
 

@@ -35,6 +35,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>cli-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- 单元测试 -->
         <dependency>
             <groupId>junit</groupId>
