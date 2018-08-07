@@ -21,6 +21,7 @@
         <module>cli-common</module>
         <module>cli-service</module>
         <module>cli-starter</module>
+        <module>cli-monitor</module>
     </modules>
 
     <properties>
@@ -131,6 +132,7 @@
             <artifactId>jackson-module-jaxb-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+
         <!--fast json-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -143,6 +145,12 @@
             <artifactId>servlet-api</artifactId>
             <version>${servlet.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- slf4j 核心包 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!-- Lombok -->
