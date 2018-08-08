@@ -22,16 +22,18 @@
         <module>cli-service</module>
         <module>cli-starter</module>
         <module>cli-monitor</module>
+        <module>cli-web</module>
+        <module>cli-api</module>
     </modules>
 
     <properties>
         <!-- 项目环境，项目使用JDK1.8进行开发 -->
-        <java.version>1.8</java.version>
+        <java.version>10</java.version>
         <spring-boot-version>1.5.9.RELEASE</spring-boot-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>10</maven.compiler.source>
+        <maven.compiler.target>10</maven.compiler.target>
 
         <!-- MyBatis版本 -->
         <mybatis.version>1.3.0</mybatis.version>
@@ -76,6 +78,7 @@
         <shiro-spring.version>1.3.2</shiro-spring.version>
         <shiro-redis.version>2.4.2.1-RELEASE</shiro-redis.version>
         <jwt.version>3.2.0</jwt.version>
+        <thymeleaf-extras-shiro.version>1.2.1</thymeleaf-extras-shiro.version>
     </properties>
 
     <dependencies>

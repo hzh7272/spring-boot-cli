@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: @profileActive@
+  mvc:
+    static-path-pattern: statics/**
+  thymeleaf:
+    prefix: classpath:/statics/templates/
+    suffix: .html
+    mode: LEGACYHTML5

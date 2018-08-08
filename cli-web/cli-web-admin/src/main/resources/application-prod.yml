@@ -1,0 +1,8 @@
+# 生产环境配置
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+  thymeleaf:
+    cache: true

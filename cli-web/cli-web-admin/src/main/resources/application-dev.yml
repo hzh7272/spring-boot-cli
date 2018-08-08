@@ -1,0 +1,8 @@
+# 开发环境配置
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+  thymeleaf:
+    cache: false
