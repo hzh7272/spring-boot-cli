@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="header :: head"></head>
+<link rel="stylesheet" th:href="@{/static/style/modules/sign.css}"/>
+<body>
+    <div id="cli" class="login-box">
+        <div class="content">
+            <div class="title">登录</div>
+            <div class="form-box">
+                <div class="img-box">
+                    <img src="https://jkhee.oss-cn-shenzhen.aliyuncs.com/system/logo/logo-simple.png"/>
+                </div>
+                <div>
+                    <i-form ref="loginForm">
+                        <form-item>
+                            <i-input placeholder="登录账号"><Icon type="md-person" slot="prepend"></Icon></i-input>
+                        </form-item>
+                        <form-item>
+                            <i-input type="password" placeholder="登录密码"><Icon type="md-lock" slot="prepend"></Icon></i-input>
+                        </form-item>
+                        <form-item>
+                            <i-button type="primary" long icon="md-log-in">登录</i-button>
+                        </form-item>
+                    </i-form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script th:src="@{/static/js/modules/sign.js}"></script>
+</html>

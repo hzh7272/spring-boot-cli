@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.login-box {
+    height: 100%;
+    background-image: url('https://hongzh.oss-cn-hangzhou.aliyuncs.com/test/login-background.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.login-box > .content {
+    width: 300px;
+    float: right;
+    margin-right: 13%;
+    padding-top: 10%;
+}
+
+.login-box > .content > .form-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 38px;
+    color: #FFF;
+}
+
+.img-box {
+    text-align: center;
+}
+
+.img-box > img {
+    width: 80px;
+}
+.token-input {
+    width: 60%;
+}

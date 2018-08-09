@@ -1,11 +1,10 @@
 package com.base.common.utils.encrypt;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 
 /**
  * AES 加密工具
@@ -46,7 +45,7 @@ public class AesUtils {
             //加密操作,返回加密后的字节数组，然后需要编码。主要编解码方式有Base64, HEX, UUE,7bit等等。此处看服务器需要什么编码方式
             byte[] encryptedData = cipher.doFinal(data.getBytes(bm));
 
-            return new BASE64Encoder().encode(encryptedData).replaceAll("\\n", "");
+            return Base64.getEncoder().encodeToString(encryptedData).replaceAll("\\n", "").replaceAll("\\r", "");
         } catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -71,7 +70,7 @@ public class AesUtils {
      */
     public static String decrypt(String data, String aesKey, String vi) {
         try {
-            byte[] byteMi = new BASE64Decoder().decodeBuffer(data);
+            byte[] byteMi = Base64.getDecoder().decode(data);
             IvParameterSpec zeroIv = new IvParameterSpec(vi.getBytes());
             SecretKeySpec key = new SecretKeySpec(aesKey.getBytes(), "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");

@@ -1,14 +1,12 @@
 package com.base.common.utils.encrypt;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 /**
  * Des加密工具
@@ -66,8 +64,7 @@ public class DesUtils {
      */
     public static String encrypt(String data, String key) throws Exception {
         byte[] bt = encrypt(data.getBytes(ENCODE), key.getBytes(ENCODE));
-        String strs = new BASE64Encoder().encode(bt);
-        return strs;
+        return Base64.getEncoder().encodeToString(bt);
     }
 
     /**
@@ -84,8 +81,7 @@ public class DesUtils {
             return null;
         }
         try {
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] buf = decoder.decodeBuffer(data);
+            byte[] buf = Base64.getDecoder().decode(data);
             byte[] bt = decrypt(buf, key.getBytes(ENCODE));
             return new String(bt, ENCODE);
         } catch (Exception e) {
