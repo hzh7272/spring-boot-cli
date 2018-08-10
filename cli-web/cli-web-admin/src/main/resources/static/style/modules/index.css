@@ -1,17 +1,106 @@
-.layout{
+.layout {
     background: #f5f7f9;
     position: relative;
     overflow: hidden;
 }
-.layout-logo{
-    width: 200px;
-    border-radius: 3px;
-    float: left;
-    color: white;
+
+.layout-logo {
+    height: 60px;
+    color: #FFF;
+    line-height: 60px;
     text-align: center;
 }
-.layout-nav{
+
+.layout-nav {
     width: 420px;
     margin: 0 auto;
     margin-right: 20px;
+}
+
+.ivu-menu-black {
+    color: #b3b9bf;
+    background-color: #001529;
+}
+
+.ivu-menu-item {
+    color: #b3b9bf;
+    background-color: black;
+}
+
+.ivu-menu-item, .ivu-menu-item-active {
+
+}
+
+.tag-box {
+    min-height: 38px;
+    max-height: 38px;
+    overflow: hidden;
+    -webkit-box-shadow: 0 0 3px 2px rgba(99, 99, 99, .1) inset;
+    box-shadow: inset 0 0 3px 2px rgba(99, 99, 99, .1);
+}
+
+.tag-box-list {
+    float: left;
+    width: calc(100% - 75px);
+    padding: 1px 8px 2px;
+    height: 55px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-transition: left .3s ease;
+    transition: left .3s ease;
+}
+
+.tag-box-list-left-btn {
+    float: left;
+    background: #FFF;
+    line-height: 37px;
+    width: 25px;
+    text-align: center;
+    font-size: 18px;
+    border-right: 1px solid #eee;
+    cursor: pointer;
+}
+
+.tag-box-list-right-btn {
+    float: right;
+    background: #FFF;
+    line-height: 37px;
+    width: 25px;
+    text-align: center;
+    font-size: 18px;
+    border-left: 1px solid #eee;
+    cursor: pointer;
+}
+
+.index-layout {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background: #f5f7f9;
+}
+
+.layout-top-menu {
+    float: right;
+}
+
+.layout-top-menu > div {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.layout-top-menu > div > i {
+    font-size: 28px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    top: 14px;
+}
+
+.ivu-card-body {
+    height: 100% !important;
 }

@@ -6,15 +6,14 @@ html, body {
 
 .login-box {
     height: 100%;
-    background-image: url('https://hongzh.oss-cn-hangzhou.aliyuncs.com/test/login-background.png');
+    background-image: url('https://hongzh.oss-cn-hangzhou.aliyuncs.com/test/login-bg.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
 
 .login-box > .content {
     width: 300px;
-    float: right;
-    margin-right: 13%;
+    margin: 0 auto;
     padding-top: 10%;
 }
 
@@ -28,6 +27,7 @@ html, body {
     text-align: center;
     font-size: 38px;
     color: #FFF;
+    margin-bottom: 20px;
 }
 
 .img-box {

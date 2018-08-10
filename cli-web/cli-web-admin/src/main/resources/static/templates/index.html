@@ -3,76 +3,116 @@
 <head th:include="header :: head"></head>
 <link rel="stylesheet" th:href="@{/static/style/modules/index.css}"/>
 <body>
-    <div id="cli">
+    <div id="cli" v-cloak>
         <div class="layout">
-            <Layout>
-                <Header>
-                    <i-menu mode="horizontal" theme="dark" active-name="1">
-                        <div class="layout-logo">CLI 管理平台</div>
-                        <div class="layout-nav">
-                            <menu-item name="1">
+            <Layout :style="{height: '100vh'}">
+                <Sider hide-trigger :style="{background: '#001529'}">
+                    <div class="layout-logo">CLI 管理平台</div>
+                    <i-menu active-name="1-2" theme="black" width="auto" :open-names="['1']">
+                        <Submenu name="1">
+                            <template slot="title">
                                 <Icon type="ios-navigate"></Icon>
                                 Item 1
-                            </menu-item>
-                            <menu-item name="2">
+                            </template>
+                            <menu-item name="1-1">Option 1</menu-item>
+                            <menu-item name="1-2">Option 2</menu-item>
+                            <menu-item name="1-3">Option 3</menu-item>
+                        </Submenu>
+                        <Submenu name="2">
+                            <template slot="title">
                                 <Icon type="ios-keypad"></Icon>
                                 Item 2
-                            </menu-item>
-                            <menu-item name="3">
+                            </template>
+                            <menu-item name="2-1">Option 1</menu-item>
+                            <menu-item name="2-2">Option 2</menu-item>
+                        </Submenu>
+                        <Submenu name="3">
+                            <template slot="title">
                                 <Icon type="ios-analytics"></Icon>
                                 Item 3
-                            </menu-item>
-                            <menu-item name="4">
-                                <Icon type="ios-paper"></Icon>
-                                Item 4
-                            </menu-item>
-                        </div>
+                            </template>
+                            <menu-item name="3-1">Option 1</menu-item>
+                            <menu-item name="3-2">Option 2</menu-item>
+                        </Submenu>
                     </i-menu>
-                </Header>
+                </Sider>
                 <Layout>
-                    <Sider hide-trigger :style="{background: '#fff'}">
-                        <i-menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
-                            <Submenu name="1">
-                                <template slot="title">
-                                    <Icon type="ios-navigate"></Icon>
-                                    Item 1
-                                </template>
-                                <menu-item name="1-1">Option 1</menu-item>
-                                <menu-item name="1-2">Option 2</menu-item>
-                                <menu-item name="1-3">Option 3</menu-item>
-                            </Submenu>
-                            <Submenu name="2">
-                                <template slot="title">
-                                    <Icon type="ios-keypad"></Icon>
-                                    Item 2
-                                </template>
-                                <menu-item name="2-1">Option 1</menu-item>
-                                <menu-item name="2-2">Option 2</menu-item>
-                            </Submenu>
-                            <Submenu name="3">
-                                <template slot="title">
-                                    <Icon type="ios-analytics"></Icon>
-                                    Item 3
-                                </template>
-                                <menu-item name="3-1">Option 1</menu-item>
-                                <menu-item name="3-2">Option 2</menu-item>
-                            </Submenu>
+                    <Header>
+                        <i-menu mode="horizontal" theme="light" active-name="1">
+                            <breadcrumb :style="{marginLeft: '20px', width: '50%', display: 'inline-block'}">
+                                <breadcrumb-item><Icon type="ios-analytics"></Icon> Home</breadcrumb-item>
+                                <breadcrumb-item>Components</breadcrumb-item>
+                                <breadcrumb-item>Layout</breadcrumb-item>
+                            </breadcrumb>
+                            <Dropdown trigger="click" class="layout-top-menu" :style="{marginRight: '20px'}">
+                                <a href="javascript:void(0)">
+                                    <span>hongzh（123123）<Icon type="md-arrow-dropdown" /></span>
+                                    <img src="https://chacha-station.oss-cn-shenzhen.aliyuncs.com/system/image/head_img.png" class="avatar"/>
+                                </a>
+                                <dropdown-menu slot="list">
+                                    <dropdown-item name="updatePwd"><i class="ivu-icon ivu-icon-locked"></i> </dropdown-item>
+                                    <dropdown-item name="changeLanguage"><i class="ivu-icon ivu-icon-earth"></i> </dropdown-item>
+                                    <dropdown-item divided name="logout"><i class="ivu-icon ivu-icon-log-out"></i> </dropdown-item>
+                                </dropdown-menu>
+                            </Dropdown>
+                            <div class="layout-top-menu">
+                                <div v-show="!control.isFullScreen">
+                                    <Icon type="md-expand" />
+                                </div>
+                                <div v-show="control.isFullScreen">
+                                    <Icon type="md-contract" />
+                                </div>
+                            </div>
                         </i-menu>
-                    </Sider>
-                    <Layout :style="{padding: '0 24px 24px'}">
-                        <breadcrumb :style="{margin: '24px 0'}">
-                            <breadcrumb-item><Icon type="ios-analytics"></Icon> Home</breadcrumb-item>
-                            <breadcrumb-item>Components</breadcrumb-item>
-                            <breadcrumb-item>Layout</breadcrumb-item>
-                        </breadcrumb>
-                        <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
-                            Content
-                        </Content>
+                    </Header>
+                    <div class="tag-box">
+                        <div class="tag-box-list-left-btn" @click="tagScrollLeft">
+                            <Icon type="ios-arrow-back" />
+                        </div>
+                        <div class="tag-box-list" id="tag-box-list">
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" closable color="primary">标签一</Tag>
+                        </div>
+                        <div class="tag-box-list-right-btn">
+                            <Icon type="ios-close-circle-outline" />
+                        </div>
+                        <div class="tag-box-list-right-btn" @click="tagScrollRight">
+                            <Icon type="ios-arrow-forward" />
+                        </div>
+                    </div>
+                    <Layout class="index-layout">
+                        <Card :style="{height: '100%'}" dis-hover>
+                            <iframe scrolling="yes" frameborder="0" style="width:100%;height: 100%;" src="main"></iframe>
+                        </Card >
                     </Layout>
                 </Layout>
             </Layout>
         </div>
     </div>
 </body>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/jquery-mousewheel/jquery.mousewheel.min.js}"></script>
 <script th:src="@{/static/js/modules/index.js}"></script>
 </html>

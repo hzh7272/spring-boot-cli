@@ -93,6 +93,16 @@
             <artifactId>jquery</artifactId>
             <version>3.3.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>jquery-mousewheel</artifactId>
+            <version>3.1.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>axios</artifactId>
+            <version>0.17.1</version>
+        </dependency>
         <!-- 隐藏版本号 -->
         <dependency>
             <groupId>org.webjars</groupId>
