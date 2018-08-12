@@ -2,17 +2,21 @@ var vue = new Vue({
     el: '#cli',
     data: {
         control: {
-            isFullScreen: false
+            isFullScreen: false,
+            openSubMenuName: [],
+            breadcrumbList: [],
+            navTagList: []
         }
     },
     methods: {
+        // 菜单标签栏左右控制
         tagScrollLeft: function() {
             document.getElementById('tag-box-list').scrollLeft = document.getElementById('tag-box-list').scrollLeft - 50;
-            cliComm.notice.success(vue, "sdfs", "sdfasdfasdfasdfasdf");
         },
         tagScrollRight: function() {
             document.getElementById('tag-box-list').scrollLeft = document.getElementById('tag-box-list').scrollLeft + 50;
         },
+        // 全屏
         fullScreen: function () {
             var docElm = document.documentElement;
             if (docElm.requestFullscreen) { //W3C
@@ -26,6 +30,7 @@ var vue = new Vue({
             }
             vue.control.isFullScreen = true;
         },
+        // 退出全屏
         exitFullScreen: function () {
             if (document.exitFullscreen) { //W3C
                 document.exitFullscreen();
@@ -37,17 +42,30 @@ var vue = new Vue({
                 document.msExitFullscreen();
             }
             vue.control.isFullScreen = false;
-        }
-    }
-});
+        },
+        // 跳转链接
+        goHref: function (name) {
+            var nameArray = name.split('|');
+            var subMenuArray = vue.control.openSubMenuName[0].split('|');
 
-$('#tag-box-list').bind('mousewheel', function(event, delta, deltaX, deltaY) {
-    if (window.console && console.log) {
-        var scrollLeft = this.scrollLeft;
-        if (-1 == deltaY) {
-            this.scrollLeft = scrollLeft + 50;
-        } else {
-            this.scrollLeft = scrollLeft - 50;
+            vue.control.breadcrumbList = [];
+            vue.control.breadcrumbList.push({
+                name: subMenuArray[0],
+                icon: subMenuArray[1]
+            });
+            vue.control.breadcrumbList.push({
+                name: nameArray[0],
+                icon: nameArray[1]
+            });
+
+            vue.control.navTagList.push({
+                name: nameArray[0],
+                icon: nameArray[1]
+            });
+        },
+        // 子菜单打开事件
+        getSubmenu: function(subMenu) {
+            vue.control.openSubMenuName = subMenu;
         }
     }
 });
