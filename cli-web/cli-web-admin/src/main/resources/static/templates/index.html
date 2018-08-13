@@ -13,7 +13,7 @@
                             <template slot="title">
                                 <i class="iconfont icon-system"></i> 系统管理
                             </template>
-                            <menu-item name="用户管理|icon-yonghu|/page/user"><i class="iconfont icon-yonghu"></i> 用户管理</menu-item>
+                            <menu-item name="用户管理|icon-yonghu|system/userManage"><i class="iconfont icon-yonghu"></i> 用户管理</menu-item>
                             <menu-item name="角色管理|icon-guanliyuan|/page/role"><i class="iconfont icon-guanliyuan"></i> 角色管理</menu-item>
                             <menu-item name="权限管理|icon-quanxian|/page/auth"><i class="iconfont icon-quanxian"></i> 权限管理</menu-item>
                             <menu-item name="文案管理|icon-31|/page/doc"><i class="iconfont icon-31"></i> 文案管理</menu-item>
@@ -53,9 +53,9 @@
                             <Icon type="ios-arrow-back" />
                         </div>
                         <div class="tag-box-list" id="tag-box-list">
-                            <Tag type="dot" :closable="tag.closable" v-for="tag in control.navTagList" :name="tag.url" :color="tag.color" @click.native="goHref(tag.name + '|' + tag.icon + '|' + tag.url)">{{tag.name}}</Tag>
+                            <Tag type="dot" :closable="tag.closable" v-for="tag in control.navTagList" :name="tag.url" @on-close="closeTag" :color="tag.color" @click.native="goHref(tag.name + '|' + tag.icon + '|' + tag.url)">{{tag.name}}</Tag>
                         </div>
-                        <div class="tag-box-list-right-btn">
+                        <div class="tag-box-list-right-btn" @click="closeAllTag">
                             <Icon type="ios-close-circle-outline" />
                         </div>
                         <div class="tag-box-list-right-btn" @click="tagScrollRight">
@@ -63,8 +63,8 @@
                         </div>
                     </div>
                     <Layout class="index-layout">
-                        <Card :style="{height: '100%'}" dis-hover>
-                            <iframe scrolling="yes" frameborder="0" style="width:100%;height: 100%;" v-show="frame.show" :src="frame.url" v-for="frame in control.frameList"></iframe>
+                        <Card :style="{height: '100%'}" dis-hover :bordered="false">
+                            <iframe scrolling="yes" frameborder="0" v-show="frame.show" :src="frame.url" v-for="frame in control.frameList"></iframe>
                         </Card >
                     </Layout>
                 </Layout>

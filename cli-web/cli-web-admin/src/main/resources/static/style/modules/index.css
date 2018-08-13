@@ -97,6 +97,15 @@
     background: #f5f7f9;
 }
 
+.index-layout > .ivu-card > .ivu-card-body {
+    padding: 0px;
+}
+
+.index-layout > .ivu-card > .ivu-card-body > iframe {
+    width: 100%;
+    height: 100%;
+}
+
 .layout-top-menu {
     float: right;
 }
