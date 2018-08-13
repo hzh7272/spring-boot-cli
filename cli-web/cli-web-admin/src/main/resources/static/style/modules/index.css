@@ -9,6 +9,7 @@
     color: #FFF;
     line-height: 60px;
     text-align: center;
+    font-size: 26px;
 }
 
 .layout-nav {
@@ -27,24 +28,24 @@
     background-color: black;
 }
 
-.ivu-menu-submenu-title:hover {
-    color: #FFF !important;
-    background-color: #001529 !important;;
+.ivu-menu-item:hover {
+    color: white !important;
+    background-color: black !important;
 }
 
-.ivu-menu-item:hover {
-    color: #FFF !important;
-    background-color: black !important;;
+.ivu-menu-submenu-title:hover {
+    color: white !important;
+    background-color: #001529 !important;
 }
 
 .ivu-menu-item-selected {
-    color: #fff;
-    background: #2d8cf0!important;
+    color: white !important;
+    background-color: #2d8cf0 !important;
 }
 
 .ivu-menu-item-selected:hover {
-    color: #fff !important;
-    background: #2d8cf0 !important;
+    color: white !important;
+    background-color: #2d8cf0 !important;
 }
 
 .tag-box {
@@ -107,7 +108,7 @@
 }
 
 .layout-top-menu > div > i {
-    font-size: 28px;
+    font-size: 24px;
 }
 
 .avatar {

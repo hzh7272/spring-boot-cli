@@ -8,24 +8,24 @@
             <Layout :style="{height: '100vh'}">
                 <Sider hide-trigger :style="{background: '#001529'}">
                     <div class="layout-logo">CLI 管理平台</div>
-                    <i-menu active-name="1-2" theme="black" width="auto" :open-names="['1']">
-                        <Submenu name="1">
+                    <i-menu ref="myMenu" accordion :active-name="this.control.currentUrl" :open-names="control.openName" theme="black" width="auto" @on-select="goHref" @on-open-change="getSubmenu">
+                        <Submenu name="系统管理|icon-system|/page/user">
                             <template slot="title">
                                 <i class="iconfont icon-system"></i> 系统管理
                             </template>
-                            <menu-item name="1-1"><i class="iconfont icon-yonghu"></i> 用户管理</menu-item>
-                            <menu-item name="1-2"><i class="iconfont icon-guanliyuan"></i> 角色管理</menu-item>
-                            <menu-item name="1-3"><i class="iconfont icon-quanxian"></i> 权限管理</menu-item>
+                            <menu-item name="用户管理|icon-yonghu|/page/user"><i class="iconfont icon-yonghu"></i> 用户管理</menu-item>
+                            <menu-item name="角色管理|icon-guanliyuan|/page/role"><i class="iconfont icon-guanliyuan"></i> 角色管理</menu-item>
+                            <menu-item name="权限管理|icon-quanxian|/page/auth"><i class="iconfont icon-quanxian"></i> 权限管理</menu-item>
+                            <menu-item name="文案管理|icon-31|/page/doc"><i class="iconfont icon-31"></i> 文案管理</menu-item>
+                            <menu-item name="系统配置|icon-peizhi|/page/setting"><i class="iconfont icon-peizhi"></i> 系统配置</menu-item>
                         </Submenu>
                     </i-menu>
                 </Sider>
                 <Layout>
                     <Header>
-                        <i-menu mode="horizontal" theme="light" active-name="1">
+                        <i-menu mode="horizontal" theme="light" active-name="1" accordion>
                             <breadcrumb :style="{marginLeft: '20px', width: '50%', display: 'inline-block'}">
-                                <breadcrumb-item><Icon type="ios-analytics"></Icon> Home</breadcrumb-item>
-                                <breadcrumb-item>Components</breadcrumb-item>
-                                <breadcrumb-item>Layout</breadcrumb-item>
+                                <breadcrumb-item v-for="item in control.breadcrumbList"><i :class="`iconfont ${item.icon}`"></i> {{item.name}}</breadcrumb-item>
                             </breadcrumb>
                             <Dropdown trigger="click" class="layout-top-menu" :style="{marginRight: '20px'}">
                                 <a href="javascript:void(0)">
@@ -39,10 +39,10 @@
                                 </dropdown-menu>
                             </Dropdown>
                             <div class="layout-top-menu">
-                                <div v-show="!control.isFullScreen">
+                                <div v-show="!control.isFullScreen" @click="fullScreen">
                                     <Icon type="md-expand" />
                                 </div>
-                                <div v-show="control.isFullScreen">
+                                <div v-show="control.isFullScreen" @click="exitFullScreen">
                                     <Icon type="md-contract" />
                                 </div>
                             </div>
@@ -53,30 +53,7 @@
                             <Icon type="ios-arrow-back" />
                         </div>
                         <div class="tag-box-list" id="tag-box-list">
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
-                            <Tag type="dot" closable color="primary">标签一</Tag>
+                            <Tag type="dot" :closable="tag.closable" v-for="tag in control.navTagList" :name="tag.url" :color="tag.color" @click.native="goHref(tag.name + '|' + tag.icon + '|' + tag.url)">{{tag.name}}</Tag>
                         </div>
                         <div class="tag-box-list-right-btn">
                             <Icon type="ios-close-circle-outline" />
@@ -87,7 +64,7 @@
                     </div>
                     <Layout class="index-layout">
                         <Card :style="{height: '100%'}" dis-hover>
-                            <iframe scrolling="yes" frameborder="0" style="width:100%;height: 100%;" src="main"></iframe>
+                            <iframe scrolling="yes" frameborder="0" style="width:100%;height: 100%;" v-show="frame.show" :src="frame.url" v-for="frame in control.frameList"></iframe>
                         </Card >
                     </Layout>
                 </Layout>
@@ -95,7 +72,5 @@
         </div>
     </div>
 </body>
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/jquery-mousewheel/jquery.mousewheel.min.js}"></script>
 <script th:src="@{/static/js/modules/index.js}"></script>
 </html>

@@ -18,4 +18,5 @@ public class SignController {
 	public String sign() {
 		return "sign";
 	}
+
 }
