@@ -70,6 +70,13 @@
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
         </dependency>
+
+        <!-- 系统管理业务模块 -->
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>cli-service-sys</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

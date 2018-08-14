@@ -10,6 +10,10 @@ spring:
     admin:
       client:
         url: http://127.0.0.1:7001
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/cli-user
+
 
 # 日志配置
 logging:
