@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <properties>
+        <property name="LOG_TAR">${sys:server.port}</property>
+        <property name="LOG_PATH">../logs/cli-monitor</property>
+        <property name="LOG_PATTERN">%d %p %C{10} %L [%t] %m%n</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout>
+                <pattern>${LOG_PATTERN}</pattern>
+            </PatternLayout>
+        </Console>
+        <!-- 按日期每天生成log文件 -->
+        <RollingFile name="RollingFile" fileName="${LOG_PATH}/cli-monitor.log" filePattern="${LOG_PATH}/cli-monitor-%d{yyyy-MM-dd_HH}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- 只保存15天的日志 -->
+            <DefaultRolloverStrategy max="24">
+                <Delete basePath="${LOG_PATH}" maxDepth="2">
+                    <IfFileName glob="*.gz" />
+                    <IfLastModified age="15D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <Console name="consolePrint" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Spring -->
+        <logger name="org.springframework" level="INFO"/>
+        <!-- General Apache libraries -->
+        <logger name="org.apache" level="INFO"/>
+
+        <!-- 开发环境打印Debug级别以上日志 -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

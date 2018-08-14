@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: @profileActive@
+
+server:
+  port: 7001
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
