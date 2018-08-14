@@ -26,3 +26,30 @@ html,body {height: 100%;}
 [v-cloak] {
     display: none;
 }
+
+.content-box {
+    padding: 16px;
+}
+
+.search {
+    border: 1px solid #eee;
+    padding: 8px 5px 3px;
+    border-radius: 2px;
+}
+
+.search>.ivu-form>.ivu-form-item {
+    margin-bottom: 6px;
+}
+
+.search>.ivu-form>.ivu-form-item>.ivu-form-item-content>.ivu-btn {
+    margin-right: 5px;
+}
+
+.table-data {
+    margin-top: 20px;
+}
+
+.table-data>.ivu-page {
+    text-align: right;
+    margin-top: 10px;
+}

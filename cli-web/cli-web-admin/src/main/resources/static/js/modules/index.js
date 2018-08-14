@@ -72,23 +72,7 @@ var vue = new Vue({
                 if (name == tag.name && url == tag.url) {
                     isExits = true;
                     tag.color = 'primary';
-                    vue.control.openName = [tag.parentName];
-
-                    vue.$nextTick(function() {
-                        vue.$refs.myMenu.updateOpened();
-                    });
-
-                    var subMenuArray = vue.control.openName[0].split('|');
-
-                    vue.control.breadcrumbList = [];
-                    vue.control.breadcrumbList.push({
-                        name: subMenuArray[0],
-                        icon: subMenuArray[1]
-                    });
-                    vue.control.breadcrumbList.push({
-                        name: nameArray[0],
-                        icon: nameArray[1]
-                    });
+                    vue.syncBreadcrumb(tag, nameArray);
                 } else {
                     tag.color = '';
                 }
@@ -103,29 +87,31 @@ var vue = new Vue({
                     closable: true,
                     parentName: vue.control.openSubMenuName[0]
                 };
-
-                vue.control.openName = [tag.parentName];
-
-                vue.$nextTick(function() {
-                    vue.$refs.myMenu.updateOpened();
-                });
-
-                var subMenuArray = vue.control.openName[0].split('|');
-
-                vue.control.breadcrumbList = [];
-                vue.control.breadcrumbList.push({
-                    name: subMenuArray[0],
-                    icon: subMenuArray[1]
-                });
-                vue.control.breadcrumbList.push({
-                    name: nameArray[0],
-                    icon: nameArray[1]
-                });
-
+                vue.syncBreadcrumb(tag, nameArray);
                 vue.control.navTagList.push(tag);
             }
 
             window.sessionStorage.menuTagList = JSON.stringify(vue.control.navTagList);
+        },
+        // 同步面包屑
+        syncBreadcrumb: function(tag, nameArray) {
+            vue.control.openName = [tag.parentName];
+
+            vue.$nextTick(function() {
+                vue.$refs.myMenu.updateOpened();
+            });
+
+            var subMenuArray = vue.control.openName[0].split('|');
+
+            vue.control.breadcrumbList = [];
+            vue.control.breadcrumbList.push({
+                name: subMenuArray[0],
+                icon: subMenuArray[1]
+            });
+            vue.control.breadcrumbList.push({
+                name: nameArray[0],
+                icon: nameArray[1]
+            });
         },
         // 更新iframe
         syncFrameUrl: function (url) {
@@ -150,6 +136,60 @@ var vue = new Vue({
                     show: true
                 });
             }
+        },
+        closeTag: function(e, url) {
+            // 删除tag
+            for (var i in vue.control.navTagList) {
+                var tag = vue.control.navTagList[i];
+                if (url == tag.url) {
+                    if ('primary' == tag.color) {
+                        // 当前选中状态，跳转前一个标签页面
+                        var lastIndex = parseInt(i) - 1;
+                        vue.control.navTagList[lastIndex].color = 'primary';
+                        vue.syncFrameUrl(vue.control.navTagList[lastIndex].url);
+                    }
+                    vue.control.navTagList.splice(i, 1);
+                    window.sessionStorage.menuTagList = JSON.stringify(vue.control.navTagList);
+                    break;
+                }
+            }
+            // 删除frame
+            for (var i in vue.control.frameList) {
+                var frame = vue.control.frameList[i];
+                if (url == frame.url) {
+                    vue.control.frameList.splice(i, 1);
+                    break;
+                }
+            }
+        },
+        closeAllTag: function () {
+            vue.control.navTagList.splice(1, vue.control.navTagList.length);
+            vue.control.navTagList[0].color = "primary";
+            window.sessionStorage.menuTagList = JSON.stringify(vue.control.navTagList);
+
+            // window.location.href = "#main";
+            // index.currentUrl = "";
+            // index.main = "view/main";
+        },
+        init: function () {
+            var url = window.location.hash.replace('#', '');
+
+            var name = '';
+
+            for (var i in vue.control.navTagList) {
+                var tag = vue.control.navTagList[i];
+                if (url == tag.url) {
+                    name = tag.name + '|' + tag.icon + '|' + tag.url;
+                    vue.control.openName = [tag.parentName];
+                    vue.control.currentUrl = name;
+                }
+            }
+
+            if ('' != name) {
+                var nameArray = name.split('|');
+                vue.syncNavTag(nameArray);
+                vue.syncFrameUrl(nameArray[2]);
+            }
         }
     },
     mounted: function () {
@@ -173,3 +213,5 @@ var vue = new Vue({
         }
     }
 });
+
+vue.init();
