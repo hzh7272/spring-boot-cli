@@ -3,7 +3,7 @@ var vue = new Vue({
     data: {
         list: {
             control: {
-                show: true
+                show: false
             },
             column: [
                 {
@@ -113,7 +113,7 @@ var vue = new Vue({
         },
         edit: {
             control: {
-                show: false,
+                show: true,
                 editFlag: false,
                 title: '新增'
             }
@@ -146,6 +146,9 @@ var vue = new Vue({
             vue.edit.control.show = false;
             vue.edit.control.editFlag = false;
             vue.edit.control.title = '';
+        },
+        clickUpload: function () {
+            document.getElementById('avatarUrlUpload').firstChild.firstChild.click();
         }
     }
 });
