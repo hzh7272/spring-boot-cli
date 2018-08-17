@@ -63,9 +63,7 @@
                         </div>
                     </div>
                     <Layout class="index-layout">
-                        <Card :style="{height: '100%'}" dis-hover :bordered="false">
-                            <iframe scrolling="yes" frameborder="0" v-show="frame.show" :src="frame.url" v-for="frame in control.frameList"></iframe>
-                        </Card >
+                        <Card :style="{height: '100%'}" dis-hover :bordered="false" id="iFrameList"></Card >
                     </Layout>
                 </Layout>
             </Layout>

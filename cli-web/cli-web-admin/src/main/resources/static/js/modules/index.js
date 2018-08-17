@@ -113,28 +113,33 @@ var vue = new Vue({
                 icon: nameArray[1]
             });
         },
-        // 更新iframe
+        // 更新iFrame
         syncFrameUrl: function (url) {
             var isExits = false;
             var showIndex = 0;
 
-            for (var i in vue.control.frameList) {
-                var frame = vue.control.frameList[i];
-                if (url == frame.url) {
+            var iFrameList = document.getElementById('iFrameList').getElementsByClassName('ivu-card-body')[0].childNodes;
+
+            for (var i = 0, size = iFrameList.length; i < size; i++) {
+                var frame = iFrameList[i];
+                if (url == frame.id) {
                     isExits = true;
                     showIndex = i;
                 } else {
-                    frame.show = false;
+                    frame.style.display = 'none';
                 }
             }
 
             if (isExits) {
-                vue.control.frameList[showIndex].show = true;
+                iFrameList[showIndex].style.display = 'block';
             } else {
-                vue.control.frameList.push({
-                    url: url,
-                    show: true
-                });
+                // 新增iFrame
+                var iFrameListBox = document.getElementById('iFrameList').getElementsByClassName('ivu-card-body')[0];
+                var iFrame = document.createElement('iframe');
+                iFrame.setAttribute('frameborder', 0);
+                iFrame.setAttribute('id', url);
+                iFrame.src = url;
+                iFrameListBox.appendChild(iFrame);
             }
         },
         closeTag: function(e, url) {
@@ -154,10 +159,12 @@ var vue = new Vue({
                 }
             }
             // 删除frame
-            for (var i in vue.control.frameList) {
-                var frame = vue.control.frameList[i];
-                if (url == frame.url) {
-                    vue.control.frameList.splice(i, 1);
+            var iFrameBox = document.getElementById('iFrameList').getElementsByClassName('ivu-card-body')[0];
+            var iFrameList = iFrameBox.childNodes;
+            for (var i = 0, size = iFrameList.length; i < size; i++) {
+                var iFrame = iFrameList[i];
+                if (url == iFrame.id) {
+                    iFrameBox.removeChild(iFrame);
                     break;
                 }
             }
@@ -166,6 +173,15 @@ var vue = new Vue({
             vue.control.navTagList.splice(1, vue.control.navTagList.length);
             vue.control.navTagList[0].color = "primary";
             window.sessionStorage.menuTagList = JSON.stringify(vue.control.navTagList);
+
+            // 删除frame
+            var iFrameBox = document.getElementById('iFrameList').getElementsByClassName('ivu-card-body')[0];
+            var iFrameList = iFrameBox.childNodes;
+            for (var i = 0, size = iFrameList.length; i < size; i++) {
+                if ('main' != iFrameList[i].id) {
+                    iFrameBox.removeChild(iFrameList[i]);
+                }
+            }
 
             // window.location.href = "#main";
             // index.currentUrl = "";
