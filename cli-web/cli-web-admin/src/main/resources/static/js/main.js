@@ -82,7 +82,10 @@ var cliComm = {
                 params: vue.list.query,
                 success: function (res) {
                     vue.list.data = res.data;
-                    vue.list.control.index = vue.list.query.page * 10;
+                    var index = (vue.list.query.page - 1) * 10 + 1;
+                    for (var i in vue.list.data) {
+                        vue.list.data[i].index = index++;
+                    }
                 }
             });
         },

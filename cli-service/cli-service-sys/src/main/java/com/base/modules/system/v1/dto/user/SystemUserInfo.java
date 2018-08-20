@@ -1,4 +1,4 @@
-package com.base.modules.system.v1.dto;
+package com.base.modules.system.v1.dto.user;
 
 import lombok.Data;
 
@@ -16,5 +16,6 @@ public class SystemUserInfo {
 	private String roleId;
 	private String roleName;
 	private String createTime;
+	private String modifyTime;
 	private Integer state;
 }

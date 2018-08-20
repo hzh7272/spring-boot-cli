@@ -1,9 +1,9 @@
 package com.base.modules.system.v1.service;
 
 import com.base.common.utils.data.Page;
-import com.base.modules.system.v1.dto.SaveSystemUser;
-import com.base.modules.system.v1.dto.SystemUserInfo;
-import com.base.modules.system.v1.dto.SystemUserSearch;
+import com.base.modules.system.v1.dto.user.SaveSystemUser;
+import com.base.modules.system.v1.dto.user.SystemUserInfo;
+import com.base.modules.system.v1.dto.user.SystemUserSearch;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 

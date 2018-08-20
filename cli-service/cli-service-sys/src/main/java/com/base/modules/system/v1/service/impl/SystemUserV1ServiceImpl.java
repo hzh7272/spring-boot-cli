@@ -2,9 +2,9 @@ package com.base.modules.system.v1.service.impl;
 
 import com.base.common.base.BaseService;
 import com.base.common.utils.data.Page;
-import com.base.modules.system.v1.dto.SaveSystemUser;
-import com.base.modules.system.v1.dto.SystemUserInfo;
-import com.base.modules.system.v1.dto.SystemUserSearch;
+import com.base.modules.system.v1.dto.user.SaveSystemUser;
+import com.base.modules.system.v1.dto.user.SystemUserInfo;
+import com.base.modules.system.v1.dto.user.SystemUserSearch;
 import com.base.modules.system.v1.model.SystemUser;
 import com.base.modules.system.v1.repository.SystemUserV1Repository;
 import com.base.modules.system.v1.service.SystemUserV1Service;
@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -50,13 +49,13 @@ public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1
 	public Mono<ResponseEntity<Page<SystemUserInfo>>> getSystemUserList(SystemUserSearch systemUserSearch, Page<SystemUserInfo> page) {
 		return Mono.fromSupplier(() -> {
 			// 创建排序方式，根据创建时间倒序
-			Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-			// 分页
-			PageRequest pageRequest = PageRequest.of(page.getPageNo(), page.getRows(), sort);
+			var sort = new Sort(Sort.Direction.DESC, "createTime");
+			// 分页t
+			var pageRequest = PageRequest.of(page.getPageNo(), page.getRows(), sort);
 			// 创建Criteria查询
-			Criteria criteria = Criteria.where("state").ne(0);
+			var criteria = Criteria.where("state").ne(0);
 			hasQueryCondition(systemUserSearch.getKeyword(), keyword -> {
-				Pattern pattern = Pattern.compile("^.*" + keyword + ".*$", Pattern.CASE_INSENSITIVE);
+				var pattern = Pattern.compile("^.*" + keyword + ".*$", Pattern.CASE_INSENSITIVE);
 				criteria.orOperator(Criteria.where("account").regex(pattern),
 						Criteria.where("nickName").regex(pattern));
 			});
@@ -65,14 +64,14 @@ public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1
 			});
 
 			// 创建查询对象
-			Query query = new Query();
+			var query = new Query();
 			query.addCriteria(criteria);
 
 	 		// 查询数据记录数
-			Long totalCountMono = mongoTemplate.count(query, SystemUser.class);
+			var totalCountMono = mongoTemplate.count(query, SystemUser.class);
 			if (0 < totalCountMono) {
 				page.setTotalCount(totalCountMono);
-				List<SystemUserInfo> data = mongoTemplate.find(query.with(pageRequest), SystemUser.class).stream()
+				var data = mongoTemplate.find(query.with(pageRequest), SystemUser.class).stream()
 						.map(systemUser -> {
 							SystemUserInfo systemUserInfo = new SystemUserInfo();
 							BeanUtils.copyProperties(systemUser, systemUserInfo);

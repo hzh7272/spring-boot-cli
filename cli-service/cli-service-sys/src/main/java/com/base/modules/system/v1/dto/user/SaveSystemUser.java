@@ -1,4 +1,4 @@
-package com.base.modules.system.v1.dto;
+package com.base.modules.system.v1.dto.user;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

@@ -19,7 +19,7 @@ var vue = new Vue({
                 },
                 {
                     title: '序号',
-                    key: 'account'
+                    key: 'index'
                 },
                 {
                     title: '账号',
@@ -31,15 +31,15 @@ var vue = new Vue({
                 },
                 {
                     title: '角色',
-                    key: 'age'
+                    key: 'roleName'
                 },
                 {
                     title: '状态',
-                    key: 'age'
+                    key: 'state'
                 },
                 {
                     title: '创建时间',
-                    key: 'age'
+                    key: 'createTime'
                 },
                 {
                     title: '修改时间',
