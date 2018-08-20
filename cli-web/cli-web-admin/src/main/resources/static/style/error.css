@@ -1,0 +1,26 @@
+.content-con {
+    text-align: center;
+}
+
+.content-con > img {
+    width: 50%;
+    position: relative;
+    top: 80px;
+}
+
+.text-con {
+    position: absolute;
+    width: 100%;
+    left: -20%;
+    top: 30px;
+}
+
+h2 {
+    color: #348eed;
+    font-size: 80px;
+}
+
+h5 {
+    color: #67647d;
+    font-size: 20px;
+}

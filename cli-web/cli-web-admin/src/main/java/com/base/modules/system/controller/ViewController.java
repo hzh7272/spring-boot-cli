@@ -11,11 +11,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 
 	/**
-	 * 首页
-	 * @return
+	 * 主页
+	 * @return 视图
 	 */
 	@GetMapping(value = {"/", "/index"})
 	public String index() {
 		return "index";
+	}
+
+	/**
+	 * 首页
+	 * @return 视图
+	 */
+	@GetMapping(value = "/home")
+	public String home() {
+		return "home";
+	}
+
+	/**
+	 * 系统用户管理页面
+	 * @return
+	 */
+	@GetMapping("/system/userManage")
+	public String userManage() {
+		return "modules/system/userManage";
 	}
 }

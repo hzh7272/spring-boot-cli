@@ -13,6 +13,13 @@
         <version>1.0.0</version>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId></groupId>
+            <artifactId></artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <pluginManagement>
             <plugins>

@@ -1,29 +1,47 @@
 var cliComm = {
     http: {
-        request: function () {
-            return axios.create({
-                timeout: 1000,
-                transformRequest: [function (data) {
-                    // 将数据转换为表单数据
-                    var ret = ''
-                    for (var it in data) {
-                        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-                    }
-                    return ret
-                }],
-                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
-            });
+        request: function (type) {
+            if ('json' == type) {
+                return axios.create({
+                    timeout: 10000,
+                    headers: {'Content-Type': 'application/json; charset=UTF-8'}
+                });
+            } else {
+                return axios.create({
+                    timeout: 10000,
+                    transformRequest: [function (data) {
+                        // 将数据转换为表单数据
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret
+                    }],
+                    headers: {'Content-Type': 'application/json; charset=UTF-8'}
+                });
+            }
         },
         get: function(vue, option) {
-
+            cliComm.http.request('form')
+                .get(option.url, {
+                    params: option.params
+                }).then(function (res) {
+                    cliComm.spin.hide(vue);
+                    option.success(res.data);
+                })
+                .catch(function (ret) {
+                    console.log(ret);
+                    cliComm.spin.hide(vue, ret);
+                    cliComm.http.getErrorNotice(vue, ret.response);
+                });
         },
         post: function(vue, option) {
             vue.$Spin.show();
-            cliComm.http.request()
+            cliComm.http.request('json')
                 .post(option.url, option.params)
                 .then(function (res) {
                     cliComm.spin.hide(vue);
-                    option.success(res);
+                    option.success(res.data);
                 })
                 .catch(function (ret) {
                     console.log(ret);
@@ -59,7 +77,14 @@ var cliComm = {
 
         },
         query: function(vue, url) {
-
+            cliComm.http.get(vue, {
+                url: url,
+                params: vue.list.query,
+                success: function (res) {
+                    vue.list.data = res.data;
+                    vue.list.control.index = vue.list.query.page * 10;
+                }
+            });
         },
         info: function(vue, url) {
 

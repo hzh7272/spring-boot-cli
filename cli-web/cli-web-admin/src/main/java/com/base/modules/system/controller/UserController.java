@@ -1,46 +1,57 @@
 package com.base.modules.system.controller;
 
-import com.base.modules.system.v1.model.SystemUser;
-import com.base.modules.system.v1.repository.SystemUserRepository;
+import com.base.common.utils.data.Page;
+import com.base.modules.system.v1.dto.SaveSystemUser;
+import com.base.modules.system.v1.dto.SystemUserInfo;
+import com.base.modules.system.v1.dto.SystemUserSearch;
+import com.base.modules.system.v1.service.SystemUserV1Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.util.Date;
+import javax.validation.Valid;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 系统用户相关控制层
  * @author hzh 2018/8/13 下午10:17
  */
-@Controller
+@RestController
 public class UserController {
 
 	@Autowired
-	private SystemUserRepository systemUserRepository;
+	private SystemUserV1Service systemUserV1Service;
 
 	/**
-	 * 系统用户管理页面
-	 * @return
+	 * 系统管理员列表
+	 * @param systemUserSearch 系统管理员查询条件数据模型
+	 * @return 系统管理员列表
+	 * @author hzh
 	 */
-	@GetMapping("/system/userManage")
-	public String userManage() {
-		return "modules/system/userManage";
+	@GetMapping("/system/users")
+	public Mono<ResponseEntity<Page<SystemUserInfo>>> getSystemUserList(SystemUserSearch systemUserSearch, Page<SystemUserInfo> page) {
+		long start = System.currentTimeMillis();
+		Mono<ResponseEntity<Page<SystemUserInfo>>> systemUserList = systemUserV1Service.getSystemUserList(systemUserSearch, page);
+		System.out.println("调用时长：" + (System.currentTimeMillis() - start));
+		return systemUserList;
 	}
 
-	@ResponseBody
+	/**
+	 * 保存系统管理员
+	 * @param saveSystemUser 保存系统用户数据模型
+	 * @return	系统用户信息数据模型
+	 * @author hzh
+	 */
 	@PostMapping("/system/user")
-	public Mono<SystemUser> save(@RequestBody SystemUser systemUser) {
-		systemUser.setCreateTime(new Date());
-		return systemUserRepository.save(systemUser);
-	}
-
-	@ResponseBody
-	@GetMapping("/system/user")
-	public Mono<SystemUser> get(String name) {
-		return systemUserRepository.findSystemUsersByNickName(name);
+	public Mono<ResponseEntity<SystemUserInfo>> save(@RequestBody @Valid SaveSystemUser saveSystemUser) {
+		long start = System.currentTimeMillis();
+		Mono<ResponseEntity<SystemUserInfo>> save = systemUserV1Service.save(saveSystemUser);
+		System.out.println("调用时长：" + (System.currentTimeMillis() - start));
+		return save;
 	}
 }

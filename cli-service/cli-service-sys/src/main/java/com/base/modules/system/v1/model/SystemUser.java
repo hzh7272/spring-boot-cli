@@ -16,6 +16,7 @@ public class SystemUser {
 
     @Id
     private String id;
+    private String roleId;
     private String account;
     private String nickName;
     private String avatarUrl;

@@ -3,7 +3,13 @@ var vue = new Vue({
     data: {
         list: {
             control: {
-                show: false
+                show: true,
+                index: 1
+            },
+            query: {
+                page: 1,
+                keyword: '66',
+                roleId: ''
             },
             column: [
                 {
@@ -13,15 +19,15 @@ var vue = new Vue({
                 },
                 {
                     title: '序号',
-                    key: 'name'
+                    key: 'account'
                 },
                 {
                     title: '账号',
-                    key: 'age'
+                    key: 'account'
                 },
                 {
                     title: '用户名',
-                    key: 'age'
+                    key: 'nickName'
                 },
                 {
                     title: '角色',
@@ -58,70 +64,42 @@ var vue = new Vue({
                     }
                 }
             ],
-            data: [
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                },
-                {
-                    name: 'hong',
-                    age: 12,
-                    address: '2018-09-09 12:12:12'
-                }
-            ]
+            data: []
         },
         edit: {
             control: {
-                show: true,
+                show: false,
                 editFlag: false,
                 title: '新增'
+            },
+            form: {
+                id: '',
+                avatarUrl: '',
+                account: '',
+                nickName: '',
+                roleId: '',
+                password: '',
+                state: 1
+            },
+            rules: {
+                account: [
+                    {required: true, message: "请输入用户账号", trigger: "blur"}
+                ],
+                nickName: [
+                    {required: true, message: "请输入用户昵称", trigger: "blur"}
+                ],
+                roleId: [
+                    {required: true, message: "请选中用户角色", trigger: "change"}
+                ],
+                password: [
+                    {required: true, message: "请输入用户初始密码", trigger: "blur"}
+                ]
             }
         }
     },
     methods: {
         search: function () {
-
+            cliComm.func.query(vue, path + 'system/users');
         },
         add: function () {
             vue.list.control.show = false;
@@ -149,6 +127,16 @@ var vue = new Vue({
         },
         clickUpload: function () {
             document.getElementById('avatarUrlUpload').firstChild.firstChild.click();
+        },
+        save: function () {
+            vue.$refs.editForm.validate(function (valid) {
+                if (valid) {
+                    var url = path + 'system/user';
+                    cliComm.func.save(vue, url, vue.edit.form);
+                }
+            });
         }
     }
 });
+
+vue.search();

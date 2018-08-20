@@ -6,7 +6,6 @@ var vue = new Vue({
             openSubMenuName: [],
             breadcrumbList: [],
             navTagList: [],
-            frameList: [],
             openName: [],
             currentUrl: ''
         }
@@ -52,9 +51,6 @@ var vue = new Vue({
 
             vue.syncNavTag(nameArray);
             vue.syncFrameUrl(nameArray[2]);
-
-            vue.control.currentUrl = name;
-            window.location.href = '#' + nameArray[2];
         },
         // 子菜单打开事件
         getSubmenu: function(subMenu) {
@@ -95,19 +91,26 @@ var vue = new Vue({
         },
         // 同步面包屑
         syncBreadcrumb: function(tag, nameArray) {
+            // 更新浏览器hash值
+            window.location.href = '#' + nameArray[2];
+            // 更新打开的菜单组
             vue.control.openName = [tag.parentName];
+            // 更新选中的菜单项
+            vue.control.currentUrl = nameArray[0] + '|' + nameArray[1] + '|' + nameArray[2];
 
             vue.$nextTick(function() {
                 vue.$refs.myMenu.updateOpened();
+                vue.$refs.myMenu.updateActiveName();
             });
-
-            var subMenuArray = vue.control.openName[0].split('|');
 
             vue.control.breadcrumbList = [];
-            vue.control.breadcrumbList.push({
-                name: subMenuArray[0],
-                icon: subMenuArray[1]
-            });
+            if (0 < vue.control.openName.length && '' != vue.control.openName[0] && undefined != vue.control.openName[0]) {
+                var subMenuArray = vue.control.openName[0].split('|');
+                vue.control.breadcrumbList.push({
+                    name: subMenuArray[0],
+                    icon: subMenuArray[1]
+                });
+            }
             vue.control.breadcrumbList.push({
                 name: nameArray[0],
                 icon: nameArray[1]
@@ -152,6 +155,7 @@ var vue = new Vue({
                         var lastIndex = parseInt(i) - 1;
                         vue.control.navTagList[lastIndex].color = 'primary';
                         vue.syncFrameUrl(vue.control.navTagList[lastIndex].url);
+                        vue.syncBreadcrumb(vue.control.navTagList[lastIndex], [vue.control.navTagList[lastIndex].name, vue.control.navTagList[lastIndex].icon, vue.control.navTagList[lastIndex].url]);
                     }
                     vue.control.navTagList.splice(i, 1);
                     window.sessionStorage.menuTagList = JSON.stringify(vue.control.navTagList);
@@ -169,6 +173,7 @@ var vue = new Vue({
                 }
             }
         },
+        // 关闭全部标签
         closeAllTag: function () {
             vue.control.navTagList.splice(1, vue.control.navTagList.length);
             vue.control.navTagList[0].color = "primary";
@@ -178,15 +183,17 @@ var vue = new Vue({
             var iFrameBox = document.getElementById('iFrameList').getElementsByClassName('ivu-card-body')[0];
             var iFrameList = iFrameBox.childNodes;
             for (var i = 0, size = iFrameList.length; i < size; i++) {
-                if ('main' != iFrameList[i].id) {
-                    iFrameBox.removeChild(iFrameList[i]);
+                var iFrame = iFrameList[i];
+                if (undefined != iFrame && 'home' != iFrame.id) {
+                    i--;
+                    iFrameBox.removeChild(iFrame);
                 }
             }
 
-            // window.location.href = "#main";
-            // index.currentUrl = "";
-            // index.main = "view/main";
+            vue.syncFrameUrl(vue.control.navTagList[0].url);
+            vue.syncBreadcrumb(vue.control.navTagList[0], [vue.control.navTagList[0].name, vue.control.navTagList[0].icon, vue.control.navTagList[0].url]);
         },
+        // 初始化iFrame
         init: function () {
             var url = window.location.hash.replace('#', '');
 
@@ -197,6 +204,7 @@ var vue = new Vue({
                 if (url == tag.url) {
                     name = tag.name + '|' + tag.icon + '|' + tag.url;
                     vue.control.openName = [tag.parentName];
+                    vue.control.openSubMenuName = [tag.parentName];
                     vue.control.currentUrl = name;
                 }
             }
@@ -209,23 +217,31 @@ var vue = new Vue({
         }
     },
     mounted: function () {
-        var home = {
-            name: '首页',
-            url: "main",
-            icon: 'icon-shouye',
-            color: "primary",
-            closable: false
-        };
+        var addHome = false;
 
         if (undefined == window.sessionStorage.menuTagList) {
             if (0 == this.control.navTagList.length) {
-                this.control.navTagList.push(home);
+                addHome = true;
             }
         } else {
             this.control.navTagList = JSON.parse(window.sessionStorage.menuTagList);
             if (0 == this.control.navTagList.length) {
-                this.control.navTagList.push(home);
+                addHome = true;
             }
+        }
+
+        // 是否添加首页
+        if (addHome) {
+            this.control.navTagList.push({
+                name: '首页',
+                url: "home",
+                icon: 'icon-shouye',
+                color: "primary",
+                closable: false
+            });
+        }
+        if ('' == window.location.hash.replace('#', '')) {
+            window.location.href = '#home';
         }
     }
 });

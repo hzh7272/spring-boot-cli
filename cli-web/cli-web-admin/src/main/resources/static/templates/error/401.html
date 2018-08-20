@@ -1,0 +1,23 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="header :: head"></head>
+<link rel="stylesheet" th:href="@{/static/style/error.css}"/>
+<body>
+<div id="cli">
+    <div class="error-page">
+        <div class="content-con">
+            <img th:src="@{/static/templates/error/error-page/error-401.svg}" alt="401">
+            <div class="text-con">
+                <h2>401</h2>
+                <h5>Oh~~您没有浏览这个页面的权限~</h5>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#cli'
+    });
+</script>
+</html>

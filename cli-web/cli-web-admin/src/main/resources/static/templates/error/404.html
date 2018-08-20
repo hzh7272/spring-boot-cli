@@ -1,0 +1,23 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="header :: head"></head>
+<link rel="stylesheet" th:href="@{/static/style/error.css}"/>
+<body>
+<div id="cli">
+    <div class="error-page">
+        <div class="content-con">
+            <img th:src="@{/static/templates/error/error-page/error-404.svg}" alt="404">
+            <div class="text-con">
+                <h2>404</h2>
+                <h5>Oh~~您的页面好像飞走了~</h5>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#cli'
+    });
+</script>
+</html>
