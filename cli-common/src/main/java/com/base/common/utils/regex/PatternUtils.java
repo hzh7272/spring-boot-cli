@@ -35,7 +35,7 @@ public class PatternUtils {
          * @author hzh
          */
         public String orElseGet(Supplier<String> supplier) {
-            return supplier.get();
+            return this.isMatch ? this.content : supplier.get();
         }
 
         /**
@@ -45,7 +45,7 @@ public class PatternUtils {
          * @author hzh
          */
         public String orElse(String value) {
-            return value;
+            return this.isMatch? this.content : value;
         }
 
         /**
@@ -54,7 +54,7 @@ public class PatternUtils {
          * @author hzh
          */
         public String get() {
-            return this.content;
+            return this.isMatch ? this.content : null;
         }
 
         /**
@@ -63,8 +63,8 @@ public class PatternUtils {
          * @author hzh
          */
         public void ifMatch(Consumer<String> consumer) {
-            if (null != content && isMatch) {
-                consumer.accept(content);
+            if (null != this.content && this.isMatch) {
+                consumer.accept(this.content);
             }
         }
     }
