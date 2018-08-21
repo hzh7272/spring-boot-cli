@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -108,6 +109,7 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
+	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<SystemAuthInfo>> save(SaveSystemAuth saveSystemAuth) {
 		var systemAuth = new SystemAuth();
 		BeanUtils.copyProperties(saveSystemAuth, systemAuth);
@@ -140,6 +142,7 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
+	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<Void>> update(SaveSystemAuth saveSystemAuth) {
 		return this.systemAuthV1Repository.findById(saveSystemAuth.getId())
 				.flatMap(systemAuth -> {
@@ -156,6 +159,7 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
+	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<Void>> delete(String id) {
 		return this.systemAuthV1Repository.findById(id)
 				.flatMap(systemAuth -> this.systemAuthV1Repository.delete(systemAuth)
