@@ -10,7 +10,6 @@ import com.base.modules.system.v1.repository.SystemUserV1Repository;
 import com.base.modules.system.v1.service.SystemUserV1Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -33,10 +31,13 @@ import java.util.stream.Collectors;
 @Service
 public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1Service {
 
-	@Autowired
 	private MongoTemplate mongoTemplate;
-	@Autowired
 	private SystemUserV1Repository systemUserV1Repository;
+
+	public SystemUserV1ServiceImpl(MongoTemplate mongoTemplate, SystemUserV1Repository systemUserV1Repository) {
+		this.mongoTemplate = mongoTemplate;
+		this.systemUserV1Repository = systemUserV1Repository;
+	}
 
 	/**
 	 * 系统管理员列表
@@ -50,7 +51,7 @@ public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1
 		return Mono.fromSupplier(() -> {
 			// 创建排序方式，根据创建时间倒序
 			var sort = new Sort(Sort.Direction.DESC, "createTime");
-			// 分页t
+			// 分页
 			var pageRequest = PageRequest.of(page.getPageNo(), page.getRows(), sort);
 			// 创建Criteria查询
 			var criteria = Criteria.where("state").ne(0);
@@ -73,7 +74,7 @@ public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1
 				page.setTotalCount(totalCountMono);
 				var data = mongoTemplate.find(query.with(pageRequest), SystemUser.class).stream()
 						.map(systemUser -> {
-							SystemUserInfo systemUserInfo = new SystemUserInfo();
+							var systemUserInfo = new SystemUserInfo();
 							BeanUtils.copyProperties(systemUser, systemUserInfo);
 							return systemUserInfo;
 						}).collect(Collectors.toList());
@@ -93,20 +94,14 @@ public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1
 	 */
 	@Override
 	public Mono<ResponseEntity<SystemUserInfo>> save(SaveSystemUser saveSystemUser) {
-		SystemUser systemUser = new SystemUser();
+		var systemUser = new SystemUser();
 		BeanUtils.copyProperties(saveSystemUser, systemUser);
-
-		try {
-			TimeUnit.SECONDS.sleep(2);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		// 保存数据，id需要zh置空
 		systemUser.setId(null);
 		return this.systemUserV1Repository.save(systemUser)
 				.map(s -> {
-					SystemUserInfo systemUserInfo = new SystemUserInfo();
+					var systemUserInfo = new SystemUserInfo();
 					BeanUtils.copyProperties(s, systemUserInfo);
 					return new ResponseEntity<>(systemUserInfo, HttpStatus.OK);
 				});

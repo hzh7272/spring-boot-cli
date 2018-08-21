@@ -1,6 +1,7 @@
 package com.base.modules.system.v1.service.impl;
 
-import com.base.common.utils.data.Page;
+import com.base.common.utils.string.StringUtils;
+import com.base.modules.system.v1.bo.auth.AuthTree;
 import com.base.modules.system.v1.dto.auth.SaveSystemAuth;
 import com.base.modules.system.v1.dto.auth.SystemAuthInfo;
 import com.base.modules.system.v1.dto.auth.SystemAuthSearch;
@@ -9,11 +10,19 @@ import com.base.modules.system.v1.repository.SystemAuthV1Repository;
 import com.base.modules.system.v1.service.SystemAuthV1Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 系统权限相关业务实现层
@@ -23,8 +32,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 
-	@Autowired
+	private MongoTemplate mongoTemplate;
 	private SystemAuthV1Repository systemAuthV1Repository;
+
+	public SystemAuthV1ServiceImpl(MongoTemplate mongoTemplate, SystemAuthV1Repository systemAuthV1Repository) {
+		this.mongoTemplate = mongoTemplate;
+		this.systemAuthV1Repository = systemAuthV1Repository;
+	}
 
 	/**
 	 * 系统权限信息列表
@@ -33,8 +47,58 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
-	public Mono<ResponseEntity<Page<SystemAuthInfo>>> authList(SystemAuthSearch systemAuthSearch) {
-		return null;
+	public Mono<ResponseEntity<List<AuthTree>>> authList(SystemAuthSearch systemAuthSearch) {
+		return Mono.fromSupplier(() -> {
+			// 创建排序方式，根据创建时间倒序
+			var sort = new Sort(Sort.Direction.DESC, "sort", "createTime");
+			// 查询条件
+			var criteria = Criteria.where("state").ne(0);
+
+			var query = new Query();
+			query.addCriteria(criteria);
+
+			List<SystemAuthInfo> systemAuthList = mongoTemplate.find(query.with(sort), SystemAuthInfo.class, "systemAuth");
+
+			// 第一层
+			var topAuthList = systemAuthList.stream()
+					.filter(systemAuthInfo -> StringUtils.isEmpty(systemAuthInfo.getParentId()))
+					.map(systemAuthInfo -> {
+						var topAuthTree = new AuthTree();
+						topAuthTree.setId(systemAuthInfo.getId());
+						topAuthTree.setParentId(systemAuthInfo.getParentId());
+						topAuthTree.setTitle(systemAuthInfo.getName());
+						topAuthTree.setExpand(true);
+						return topAuthTree;
+					}).collect(Collectors.toList());
+
+			// 递归构建权限数据树
+			topAuthList.forEach(authTree -> recursiveAuth(authTree, systemAuthList));
+
+			return new ResponseEntity<>(topAuthList, HttpStatus.OK);
+		});
+	}
+
+	/**
+	 * 递归构建权限数据树
+	 * @param authTree 权限数据树
+	 * @param systemAuthList 权限数据列表
+	 * @author hzh
+	 */
+	private void recursiveAuth(AuthTree authTree, List<SystemAuthInfo> systemAuthList) {
+		List<AuthTree> children = systemAuthList.stream()
+				.filter(sai -> !StringUtils.isEmpty(sai.getParentId()) && sai.getParentId().equals(authTree.getId()))
+				.map(sai -> {
+					var childAuthTree = new AuthTree();
+					childAuthTree.setId(sai.getId());
+					childAuthTree.setParentId(sai.getParentId());
+					childAuthTree.setTitle(sai.getName());
+					childAuthTree.setExpand(true);
+
+					recursiveAuth(childAuthTree, systemAuthList);
+					return childAuthTree;
+		}).collect(Collectors.toList());
+
+		authTree.setChildren(children);
 	}
 
 	/**
@@ -45,13 +109,28 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 */
 	@Override
 	public Mono<ResponseEntity<SystemAuthInfo>> save(SaveSystemAuth saveSystemAuth) {
-		SystemAuth systemAuth = new SystemAuth();
+		var systemAuth = new SystemAuth();
 		BeanUtils.copyProperties(saveSystemAuth, systemAuth);
 		return this.systemAuthV1Repository.save(systemAuth).map(s -> {
-			SystemAuthInfo systemAuthInfo = new SystemAuthInfo();
+			var systemAuthInfo = new SystemAuthInfo();
 			BeanUtils.copyProperties(s, systemAuthInfo);
 			return ResponseEntity.ok(systemAuthInfo);
 		});
+	}
+
+	/**
+	 * 获取系统权限详情
+	 * @param id 系统权限ID
+	 * @return 系统权限信息
+	 * @author hzh
+	 */
+	@Override
+	public Mono<ResponseEntity<SystemAuthInfo>> info(String id) {
+		return this.systemAuthV1Repository.findById(id).flatMap(auth -> {
+			var systemAuthInfo = new SystemAuthInfo();
+			BeanUtils.copyProperties(auth, systemAuthInfo);
+			return Mono.just(new ResponseEntity<>(systemAuthInfo, HttpStatus.OK));
+		}).defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	/**

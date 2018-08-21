@@ -143,4 +143,14 @@ public class PatternUtils {
     public static boolean isHongKongPhoneNumber(String content) {
         return matchFunction.apply(content, "[2,3,6,7,8,9]\\d{7}");
     }
+
+    /**
+     * 匹配邮箱
+     * @param content 邮箱
+     * @return 返回匹配结果
+     * @author hzh
+     */
+    public static boolean isEmail(String content) {
+        return matchFunction.apply(content, "[a-zA-Z0-9_.-]*@[a-zA-Z0-9_.-]*(\\.[a-zA-Z0-9]{2,4}+)");
+    }
 }

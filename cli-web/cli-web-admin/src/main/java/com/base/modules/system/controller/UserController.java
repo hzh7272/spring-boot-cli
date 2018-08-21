@@ -5,7 +5,6 @@ import com.base.modules.system.v1.dto.user.SaveSystemUser;
 import com.base.modules.system.v1.dto.user.SystemUserInfo;
 import com.base.modules.system.v1.dto.user.SystemUserSearch;
 import com.base.modules.system.v1.service.SystemUserV1Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +21,11 @@ import javax.validation.Valid;
 @RestController
 public class UserController {
 
-	@Autowired
 	private SystemUserV1Service systemUserV1Service;
+
+	public UserController(SystemUserV1Service systemUserV1Service) {
+		this.systemUserV1Service = systemUserV1Service;
+	}
 
 	/**
 	 * 系统管理员列表
