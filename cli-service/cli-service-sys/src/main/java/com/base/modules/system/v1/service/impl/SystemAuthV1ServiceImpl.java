@@ -4,7 +4,6 @@ import com.base.common.utils.string.StringUtils;
 import com.base.modules.system.v1.bo.auth.AuthTree;
 import com.base.modules.system.v1.dto.auth.SaveSystemAuth;
 import com.base.modules.system.v1.dto.auth.SystemAuthInfo;
-import com.base.modules.system.v1.dto.auth.SystemAuthSearch;
 import com.base.modules.system.v1.model.SystemAuth;
 import com.base.modules.system.v1.repository.SystemAuthV1Repository;
 import com.base.modules.system.v1.service.SystemAuthV1Service;
@@ -21,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -43,15 +40,14 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 
 	/**
 	 * 系统权限信息列表
-	 * @param systemAuthSearch 系统权限查询条件
 	 * @return 系统权限信息列表
 	 * @author hzh
 	 */
 	@Override
-	public Mono<ResponseEntity<List<AuthTree>>> authList(SystemAuthSearch systemAuthSearch) {
+	public Mono<ResponseEntity<List<AuthTree>>> authList() {
 		return Mono.fromSupplier(() -> {
 			// 创建排序方式，根据创建时间倒序
-			var sort = new Sort(Sort.Direction.DESC, "sort", "createTime");
+			var sort = new Sort(Sort.Direction.ASC, "sort", "createTime");
 			// 查询条件
 			var criteria = Criteria.where("state").ne(0);
 
@@ -93,7 +89,7 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 					childAuthTree.setId(sai.getId());
 					childAuthTree.setParentId(sai.getParentId());
 					childAuthTree.setTitle(sai.getName());
-					childAuthTree.setExpand(true);
+					childAuthTree.setExpand(false);
 
 					recursiveAuth(childAuthTree, systemAuthList);
 					return childAuthTree;
@@ -109,10 +105,10 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
-	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<SystemAuthInfo>> save(SaveSystemAuth saveSystemAuth) {
 		var systemAuth = new SystemAuth();
 		BeanUtils.copyProperties(saveSystemAuth, systemAuth);
+		systemAuth.setId(null);
 		return this.systemAuthV1Repository.save(systemAuth).map(s -> {
 			var systemAuthInfo = new SystemAuthInfo();
 			BeanUtils.copyProperties(s, systemAuthInfo);
@@ -142,11 +138,11 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
-	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<Void>> update(SaveSystemAuth saveSystemAuth) {
 		return this.systemAuthV1Repository.findById(saveSystemAuth.getId())
 				.flatMap(systemAuth -> {
 					BeanUtils.copyProperties(saveSystemAuth, systemAuth);
+					systemAuth.setId("5b7d791f1ff06323c0e73269");
 					return this.systemAuthV1Repository.save(systemAuth)
 							.then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)));
 				}).defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -159,7 +155,6 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 	 * @author hzh
 	 */
 	@Override
-	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<Void>> delete(String id) {
 		return this.systemAuthV1Repository.findById(id)
 				.flatMap(systemAuth -> this.systemAuthV1Repository.delete(systemAuth)

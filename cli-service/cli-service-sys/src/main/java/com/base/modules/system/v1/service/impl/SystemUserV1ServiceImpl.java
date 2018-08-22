@@ -94,7 +94,6 @@ public class SystemUserV1ServiceImpl extends BaseService implements SystemUserV1
 	 * @author hzh
 	 */
 	@Override
-	@Transactional(rollbackFor = RuntimeException.class)
 	public Mono<ResponseEntity<SystemUserInfo>> save(SaveSystemUser saveSystemUser) {
 		var systemUser = new SystemUser();
 		BeanUtils.copyProperties(saveSystemUser, systemUser);

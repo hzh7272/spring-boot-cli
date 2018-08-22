@@ -1,0 +1,103 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="header :: head"></head>
+<body>
+<div id="cli" v-cloak class="content-box">
+    <!-- 数据列表 -->
+    <div v-show="list.control.show">
+        <Row :gutter="16">
+            <i-col span="24" :style="{marginBottom: '10px'}">
+                <div class="search">
+                    <i-form inline>
+                        <form-item>
+                            <i-button icon="md-add" type="primary" @click="addTopAuth">新增一级权限</i-button>
+                            <i-button icon="md-add" type="info" @click="addChildrenAuth">新增子权限</i-button>
+                            <i-button icon="md-trash" type="error">删除</i-button>
+                        </form-item>
+                    </i-form>
+                </div>
+            </i-col>
+            <i-col span="7">
+                <Card dis-hover>
+                    <p slot="title">
+                        <Icon type="ios-key"></Icon>
+                        权限列表
+                    </p>
+                    <div>
+                        <Tree :data="list.authTree" @on-select-change="selectTreeItem"></Tree>
+                    </div>
+                </Card>
+            </i-col>
+            <i-col span="17">
+                <Card dis-hover>
+                    <p slot="title">
+                        <Icon type="md-menu"></Icon>
+                        权限信息
+                    </p>
+                    <div v-show="list.control.showInfo">
+                        <i-form ref="authForm" :model="list.info" :rules="list.rules" :label-width="98">
+                            <form-item prop="id"></form-item>
+                            <Row :gutter="16">
+                                <i-col span="12">
+                                    <form-item label="权限种类：" prop="species">
+                                        <radio-group v-model="list.info.species" @on-change="changeAuthSpecies">
+                                            <Radio label="system">系统权限</Radio>
+                                            <Radio label="business">业务权限</Radio>
+                                        </radio-group>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="权限类型：" prop="type">
+                                        <radio-group v-model="list.info.type">
+                                            <Radio :label="1" :disabled="list.control.disabled">菜单</Radio>
+                                            <Radio :label="2" :disabled="list.control.disabled">操作</Radio>
+                                        </radio-group>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="权限名称：" prop="name">
+                                        <i-input v-model="list.info.name"></i-input>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="资源路径：" v-show="1 == list.info.type && 'system' == list.info.species" prop="resource">
+                                        <i-input v-model="list.info.resource"></i-input>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="图标icon：" v-show="1 == list.info.type && 'system' == list.info.species" prop="icon">
+                                        <i-input v-model="list.info.icon"></i-input>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="权限表达式：" prop="permission">
+                                        <i-input v-model="list.info.permission"></i-input>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="权重：" prop="sort">
+                                        <input-number v-model="list.info.sort" :min="1" :max="99" :editable="false"></input-number>
+                                    </form-item>
+                                </i-col>
+                                <i-col span="12">
+                                    <form-item label="状态：" prop="state">
+                                        <radio-group v-model="list.info.state">
+                                            <Radio :label="1">有效</Radio>
+                                            <Radio :label="2">无效</Radio>
+                                        </radio-group>
+                                    </form-item>
+                                </i-col>
+                            </Row>
+                            <form-item>
+                                <i-button type="primary" icon="md-checkmark" @click="save" :style="{marginLeft: '140px'}">提交</i-button>
+                            </form-item>
+                        </i-form>
+                    </div>
+                </Card>
+            </i-col>
+        </Row>
+    </div>
+</div>
+</body>
+<script th:src="@{/static/js/modules/system/authManage.js}"></script>
+</html>

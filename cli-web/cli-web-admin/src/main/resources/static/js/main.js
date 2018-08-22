@@ -50,7 +50,18 @@ var cliComm = {
                 });
         },
         put: function(vue, option) {
-
+            vue.$Spin.show();
+            cliComm.http.request('json')
+                .put(option.url, option.params)
+                .then(function (res) {
+                    cliComm.spin.hide(vue);
+                    option.success(res.data);
+                })
+                .catch(function (ret) {
+                    console.log(ret);
+                    cliComm.spin.hide(vue, ret);
+                    cliComm.http.getErrorNotice(vue, ret.response);
+                });
         },
         delete: function(vue, option) {
 
@@ -94,6 +105,16 @@ var cliComm = {
         },
         save: function(vue, url, data) {
             cliComm.http.post(vue, {
+                url: url,
+                params: data,
+                success: function (res) {
+                    vue.back();
+                    cliComm.notice.success(vue, '操作成功', '保存数据成功');
+                }
+            });
+        },
+        update: function (vue, url, data) {
+            cliComm.http.put(vue, {
                 url: url,
                 params: data,
                 success: function (res) {

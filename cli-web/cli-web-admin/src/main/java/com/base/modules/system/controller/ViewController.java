@@ -30,10 +30,19 @@ public class ViewController {
 
 	/**
 	 * 系统用户管理页面
-	 * @return
+	 * @return 视图
 	 */
 	@GetMapping("/system/userManage")
 	public String userManage() {
 		return "modules/system/userManage";
+	}
+
+	/**
+	 * 系统权限管理页面
+	 * @return 视图
+	 */
+	@GetMapping("/system/authManage")
+	public String authManage() {
+		return "modules/system/authManage";
 	}
 }

@@ -17,11 +17,10 @@ public interface SystemAuthV1Service {
 
 	/**
 	 * 系统权限信息列表
-	 * @param systemAuthSearch 系统权限查询条件
 	 * @return 系统权限信息列表
 	 * @author hzh
 	 */
-	Mono<ResponseEntity<List<AuthTree>>> authList(SystemAuthSearch systemAuthSearch);
+	Mono<ResponseEntity<List<AuthTree>>> authList();
 
 	/**
 	 * 保存系统权限

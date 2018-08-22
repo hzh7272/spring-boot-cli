@@ -17,5 +17,6 @@ public class SaveSystemAuth {
 	private String resource;
 	private String icon;
 	private String permission;
+	private Integer sort;
 	private Integer state;
 }
