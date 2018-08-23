@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -146,6 +145,24 @@ public class SystemAuthV1ServiceImpl implements SystemAuthV1Service {
 					return this.systemAuthV1Repository.save(systemAuth)
 							.then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)));
 				}).defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
+
+	/**
+	 * 检查系统权限
+	 * @param id 权限ID
+	 * @return 返回子权限数量
+	 * @author hzh
+	 */
+	@Override
+	public Mono<Integer> checkAuth(String id) {
+		return Mono.fromSupplier(() -> {
+			var criteria = Criteria.where("parentId").is(id);
+			var query = new Query();
+			query.addCriteria(criteria);
+
+			int count = (int) mongoTemplate.count(query, SystemAuth.class);
+			return count;
+		});
 	}
 
 	/**

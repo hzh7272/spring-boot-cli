@@ -28,8 +28,7 @@ var cliComm = {
                 }).then(function (res) {
                     cliComm.spin.hide(vue);
                     option.success(res.data);
-                })
-                .catch(function (ret) {
+                }).catch(function (ret) {
                     console.log(ret);
                     cliComm.spin.hide(vue, ret);
                     cliComm.http.getErrorNotice(vue, ret.response);
@@ -42,8 +41,7 @@ var cliComm = {
                 .then(function (res) {
                     cliComm.spin.hide(vue);
                     option.success(res.data);
-                })
-                .catch(function (ret) {
+                }).catch(function (ret) {
                     console.log(ret);
                     cliComm.spin.hide(vue, ret);
                     cliComm.http.getErrorNotice(vue, ret.response);
@@ -56,15 +54,24 @@ var cliComm = {
                 .then(function (res) {
                     cliComm.spin.hide(vue);
                     option.success(res.data);
-                })
-                .catch(function (ret) {
+                }).catch(function (ret) {
                     console.log(ret);
                     cliComm.spin.hide(vue, ret);
                     cliComm.http.getErrorNotice(vue, ret.response);
                 });
         },
         delete: function(vue, option) {
-
+            cliComm.http.request('form')
+                .delete(option.url, {
+                    params: option.params
+                }).then(function (res) {
+                cliComm.spin.hide(vue);
+                option.success(res.data);
+            }).catch(function (ret) {
+                console.log(ret);
+                cliComm.spin.hide(vue, ret);
+                cliComm.http.getErrorNotice(vue, ret.response);
+            });
         },
         getErrorNotice: function (vue, response) {
             var title = "";
@@ -124,7 +131,13 @@ var cliComm = {
             });
         },
         delete: function(vue, url) {
-
+            cliComm.http.delete(vue, {
+                url: url,
+                success: function (res) {
+                    vue.back();
+                    cliComm.notice.success(vue, '操作成功', '删除数据成功');
+                }
+            });
         },
         deleteBatch: function(vue, url, ids) {
 

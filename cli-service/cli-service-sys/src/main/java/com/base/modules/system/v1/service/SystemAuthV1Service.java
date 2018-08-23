@@ -47,6 +47,14 @@ public interface SystemAuthV1Service {
 	Mono<ResponseEntity<Void>> update(SaveSystemAuth saveSystemAuth);
 
 	/**
+	 * 检查系统权限
+	 * @param id 权限ID
+	 * @return 返回子权限数量
+	 * @author hzh
+	 */
+	Mono<Integer> checkAuth(String id);
+
+	/**
 	 * 删除系统权限
 	 * @param id 系统权限ID
 	 * @return 删除结果

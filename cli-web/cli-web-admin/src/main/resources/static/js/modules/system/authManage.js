@@ -105,66 +105,42 @@ var vue = new Vue({
             vue.$refs.authForm.validate(function (valid) {
                 if (valid) {
                     var url = path + "auth";
+                    var option = {
+                        url: url,
+                        params: vue.list.info,
+                        success: function (res) {
+                            cliComm.notice.success(vue, '操作成功', '保存数据成功');
+                            vue.loadAuthTree();
+                        }
+                    };
                     if ('' == vue.list.info.id) {
-                        cliComm.http.post(vue, {
-                            url: url,
-                            params: vue.list.info,
-                            success: function (res) {
-                                cliComm.notice.success(vue, '操作成功', '保存数据成功');
-                                vue.loadAuthTree();
-                            }
-                        });
+                        cliComm.http.post(vue, option);
                     } else {
-                        cliComm.http.put(vue, {
-                            url: url,
-                            params: vue.list.info,
-                            success: function (res) {
-                                cliComm.notice.success(vue, '操作成功', '保存数据成功');
-                                vue.loadAuthTree();
-                            }
-                        });
+                        cliComm.http.put(vue, option);
                     }
                 }
             });
+        },
+        deleteAuth: function () {
+            if ('' != vue.list.info.id) {
+                cliComm.http.get(vue, {
+                    url: path + 'auth/' + vue.list.info.id + '/check',
+                    success: function (res) {
+                        if (0 < res) {
+                            cliComm.notice.warning(vue, '操作错误', '请先删除子节点');
+                        } else {
+                            cliComm.http.delete(vue, {
+                                url: path + 'auth/' + vue.list.info.id,
+                                success: function () {
+                                    cliComm.notice.success(vue, '操作成功', '删除数据成功');
+                                    vue.loadAuthTree();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
-        // search: function () {
-        //     cliComm.func.query(vue, path + 'system/users');
-        // },
-        // add: function () {
-        //     vue.list.control.show = false;
-        //     vue.edit.control.show = true;
-        //     vue.edit.control.editFlag = false;
-        //     vue.edit.control.title = '新增';
-        // },
-        // edit: function (data) {
-        //     vue.list.control.show = false;
-        //     vue.edit.control.show = true;
-        //     vue.edit.control.editFlag = true;
-        //     vue.edit.control.title = '编辑';
-        // },
-        // delete: function (data) {
-        //
-        // },
-        // deleteBatch: function (data) {
-        //
-        // },
-        // back: function () {
-        //     vue.list.control.show = true;
-        //     vue.edit.control.show = false;
-        //     vue.edit.control.editFlag = false;
-        //     vue.edit.control.title = '';
-        // },
-        // clickUpload: function () {
-        //     document.getElementById('avatarUrlUpload').firstChild.firstChild.click();
-        // },
-        // save: function () {
-        //     vue.$refs.editForm.validate(function (valid) {
-        //         if (valid) {
-        //             var url = path + 'system/user';
-        //             cliComm.func.save(vue, url, vue.edit.form);
-        //         }
-        //     });
-        // }
     }
 });
 

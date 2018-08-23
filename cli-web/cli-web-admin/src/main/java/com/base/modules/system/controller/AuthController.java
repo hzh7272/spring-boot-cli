@@ -68,6 +68,16 @@ public class AuthController {
 	}
 
 	/**
+	 * 检查权限
+	 * @param id 权限ID
+	 * @return 权限数量
+	 */
+	@GetMapping("/auth/{id}/check")
+	public Mono<Integer> checkAuth(@PathVariable("id") String id) {
+		return this.systemAuthV1Service.checkAuth(id);
+	}
+
+	/**
 	 * 删除权限信息
 	 * @param id 权限ID
 	 * @return 返回删除结果
